@@ -1,0 +1,278 @@
+---
+// Home page ( / )
+import Base from '../layouts/Base.astro';
+import { site, services, gallery } from '../data/site.js';
+
+const recent = gallery.slice(0, 8);
+---
+<Base
+  title="Kafkas Flooring | Flooring Installation in Vancouver"
+  description="Hardwood, laminate, luxury vinyl plank, glue-down vinyl and carpet tile installed across Vancouver. 16 years experience, fully insured, free estimates."
+>
+<main>
+  <!-- Hero: full-bleed photo, teal glow, cream-ringed circle like the logo -->
+  <section class="hero">
+    <img src="/images/herringbone-walnut.jpg" alt="Walnut herringbone floor beside floor-to-ceiling windows" fetchpriority="high" />
+    <div class="hero-shade"></div>
+    <div class="hero-inner">
+      <div class="hero-circle">
+        <h1 class="display hero-title">Floors,<br />laid right.</h1>
+        <p class="hero-sub">Hardwood, laminate, vinyl and carpet tile.<br />{site.yearsExperience} years installing across Vancouver.</p>
+      </div>
+      <div class="hero-ctas">
+        <a href="/contact" class="btn btn-oak">Get a Free Estimate</a>
+        <a href="/gallery" class="btn btn-cream">See Our Floors</a>
+      </div>
+    </div>
+    <span class="hero-caption">Walnut herringbone, new build</span>
+  </section>
+
+  <!-- Facts strip -->
+  <section style="background:#103A3D">
+    <div class="wrap facts">
+      <span>{site.yearsExperience} years</span><span class="oak" aria-hidden="true">·</span><span>Fully insured</span><span class="oak" aria-hidden="true">·</span><span>Homes and businesses</span><span class="oak" aria-hidden="true">·</span><span>Free estimates</span>
+    </div>
+  </section>
+
+  <!-- The sample board: 7 services as planks -->
+  <section class="cream">
+    <div class="wrap intro-grid" style="padding-top:clamp(72px,9vw,128px);padding-bottom:clamp(40px,4vw,56px)">
+      <h2 class="display" style="font-size:clamp(44px,5.4vw,88px)">The sample board</h2>
+      <p style="margin:0;font-size:19px;color:#27484A">Seven things we install. Hover a plank to read about it, or tap through on your phone.</p>
+    </div>
+    <div class="wrap" style="padding-bottom:clamp(72px,9vw,128px)">
+      <div class="board" id="board">
+        {services.map((s, i) => (
+          <a href="/services" class:list={['plank', { active: i === 0 }]} data-index={i}>
+            <img src={s.img} alt={s.title} loading="lazy" />
+            <span class="plank-shade"></span>
+            <span class="plank-text">
+              <span class="plank-title">{s.title}</span>
+              <span class="plank-desc">{s.short}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Before / after slider -->
+  <section style="background:#103A3D">
+    <div class="wrap intro-grid" style="padding-top:clamp(72px,9vw,128px);padding-bottom:clamp(72px,9vw,128px);gap:48px 88px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <h2 class="display" style="font-size:clamp(40px,4.6vw,76px);line-height:1.02">What’s under it matters most.</h2>
+        <p style="margin:0;font-size:19px;color:#D2E4E1">Squeaks, gaps and lifting seams usually start with a subfloor that was never flat. We grind the high spots and pour self-leveler before anything goes down.</p>
+        <p style="margin:0;font-size:19px;color:#D2E4E1">This older Vancouver kitchen went from a patched, wavy subfloor to a dead-flat pour, then black and white vinyl tile on the diagonal. <strong class="oak">Drag the handle to compare.</strong></p>
+      </div>
+      <div class="compare" id="compare" data-no-zoom style="--pos:50%">
+        <img src="/images/checkerboard.jpg" alt="Finished vinyl tile kitchen" draggable="false" loading="lazy" />
+        <div class="compare-before"><img src="/images/self-level.jpg" alt="Self-leveler poured on the kitchen subfloor" draggable="false" loading="lazy" /></div>
+        <div class="compare-line" aria-hidden="true"></div>
+        <div class="compare-handle" aria-hidden="true">↔</div>
+        <span class="compare-tag" style="left:14px;background:#103A3D;color:#F4F0E6">Before</span>
+        <span class="compare-tag" style="right:14px;background:#E2AE6C;color:#103A3D">After</span>
+        <!-- Invisible slider on top: handles mouse, touch and keyboard (arrow keys) -->
+        <input type="range" min="2" max="98" value="50" step="1" class="compare-range" aria-label="Before and after comparison: move to reveal more of the before or after photo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Stairs -->
+  <section class="cream">
+    <div class="wrap" style="padding-top:clamp(72px,9vw,128px);padding-bottom:clamp(72px,9vw,128px)">
+      <div class="stairs">
+        <div style="display:flex;flex-direction:column;gap:20px;padding-right:20px">
+          <h2 class="display" style="font-size:clamp(44px,5vw,84px)">Stairs, one step at a time.</h2>
+          <p style="margin:0;font-size:19px;color:#27484A">Stairs are where a cheap install shows first. Every tread and riser is cut to its own stair, nosings matched to the floor, edges finished so nothing lifts or rattles.</p>
+        </div>
+        <figure class="step step-1"><img src="/images/oak-winder.jpg" alt="White oak winder stairs in a bay window" loading="lazy" /><figcaption class="caption">White oak winders</figcaption></figure>
+        <figure class="step step-2"><img src="/images/acacia-stairs.jpg" alt="Acacia hardwood hallway running down the stairs" loading="lazy" /><figcaption class="caption">Acacia hall and stairs</figcaption></figure>
+        <figure class="step step-3"><img src="/images/lvp-stairs.jpg" alt="Vinyl plank stair treads and risers" loading="lazy" /><figcaption class="caption">Vinyl plank treads</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commercial -->
+  <section class="commercial">
+    <img src="/images/commercial-lvp.jpg" alt="Light oak vinyl plank in a retail store" loading="lazy" />
+    <div class="commercial-shade"></div>
+    <div class="wrap" style="position:relative;padding-top:clamp(96px,12vw,180px);padding-bottom:clamp(96px,12vw,180px)">
+      <div style="max-width:600px;display:flex;flex-direction:column;gap:22px">
+        <h2 class="display" style="font-size:clamp(42px,5vw,84px)">Shops, offices, rentals.</h2>
+        <p style="margin:0;font-size:19px;color:#E1EDEB">Commercial vinyl plank and carpet tile laid to your schedule, so you open on time. This store got wide light-oak plank, wall to wall.</p>
+        <a href="/contact" class="btn btn-oak" style="align-self:flex-start">Quote a commercial job</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process statement -->
+  <section style="background:#27666A">
+    <div style="max-width:1100px;margin:0 auto;padding:clamp(80px,10vw,150px) clamp(20px,4vw,56px);text-align:center">
+      <p class="display" style="font-size:clamp(32px,4.2vw,64px);line-height:1.2;letter-spacing:0.02em">We measure for free. We fix the subfloor. We lay it, trim it, <span style="color:#F0C489">and leave it clean.</span></p>
+    </div>
+  </section>
+
+  <!-- Recent floors -->
+  <section style="background:#103A3D">
+    <div class="wrap" style="padding-top:clamp(72px,9vw,128px);padding-bottom:clamp(72px,9vw,128px)">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:clamp(28px,3vw,44px)">
+        <h2 class="display" style="font-size:clamp(44px,5.4vw,88px)">Recent floors</h2>
+        <a href="/gallery" style="font-weight:800;font-size:18px">Full gallery →</a>
+      </div>
+      <div class="masonry">
+        {recent.map((g) => (
+          <figure><img src={g.img} alt={g.label} loading="lazy" /><figcaption class="caption" style="font-size:14px;padding:6px 12px">{g.label}</figcaption></figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cream">
+    <div class="wrap intro-grid" style="padding-top:clamp(72px,9vw,128px);padding-bottom:clamp(72px,9vw,128px);gap:48px 88px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <h2 class="display" style="font-size:clamp(44px,5.4vw,92px)">New floors? Get a price first.</h2>
+        <p style="margin:0;font-size:20px;color:#27484A;max-width:28em">Send the rooms, rough square footage and the floor you have in mind. We’ll come measure and give you a written estimate, free. We work across Vancouver, Burnaby, Richmond, the North Shore, New Westminster, Coquitlam and Surrey.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <a href="/contact" class="btn btn-teal">Get a Free Estimate</a>
+          <a href={site.facebook} target="_blank" rel="noopener" class="btn btn-outline-teal">Message on Facebook</a>
+        </div>
+      </div>
+      <div class="cta-circle"><img src="/images/herringbone-oak.jpg" alt="Oak herringbone close-up" loading="lazy" /></div>
+    </div>
+  </section>
+</main>
+</Base>
+
+<script is:inline>
+  // Sample board: hovering (or focusing) a plank makes it the wide one.
+  // Clicking the wide plank goes to /services; tapping a narrow one just opens it.
+  (function () {
+    var board = document.getElementById('board');
+    if (!board) return;
+    var planks = board.querySelectorAll('.plank');
+    function pick(p) {
+      planks.forEach(function (x) { x.classList.toggle('active', x === p); });
+    }
+    planks.forEach(function (p) {
+      p.addEventListener('mouseenter', function () { pick(p); });
+      p.addEventListener('focus', function () { pick(p); });
+      p.addEventListener('click', function (e) {
+        if (!p.classList.contains('active')) { e.preventDefault(); pick(p); }
+      });
+    });
+  })();
+
+  // Before/after slider: the invisible range input sets --pos on the box.
+  (function () {
+    var box = document.getElementById('compare');
+    if (!box) return;
+    var range = box.querySelector('.compare-range');
+    function update() { box.style.setProperty('--pos', range.value + '%'); }
+    range.addEventListener('input', update);
+    update();
+  })();
+</script>
+
+<style>
+  /* Hero */
+  .hero { position: relative; min-height: calc(100vh - 88px); overflow: hidden; background: #0A282A; display: flex; align-items: center; justify-content: center; }
+  .hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero-shade { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(16,58,61,0.72) 0%, rgba(16,58,61,0.45) 45%, rgba(10,40,42,0.2) 75%); }
+  .hero-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: clamp(20px,3vh,32px); padding: 48px 0 64px; }
+  .hero-circle {
+    --d: max(300px, min(86vw, 640px, calc(100vh - 290px)));
+    width: var(--d); height: var(--d); flex: none;
+    border: clamp(5px,0.6vw,8px) solid #F4F0E6; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    gap: clamp(10px,2vh,22px); padding: 0 11%; background: rgba(16,58,61,0.6);
+  }
+  .hero-title { font-size: calc(var(--d) * 0.13); line-height: 1.04; letter-spacing: 0.02em; color: #F4F0E6; }
+  .hero-sub { margin: 0; font-size: max(15px, calc(var(--d) * 0.03)); line-height: 1.45; color: #F4F0E6; }
+  .hero-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 20px; }
+  .hero-caption { position: absolute; left: clamp(20px,4vw,56px); bottom: 24px; color: #F4F0E6; font-size: 15px; font-weight: 600; }
+
+  /* Facts strip */
+  .facts {
+    padding-top: clamp(28px,3vw,40px); padding-bottom: clamp(28px,3vw,40px);
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 40px;
+    font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: clamp(20px,1.8vw,26px);
+    letter-spacing: 0.08em; text-transform: uppercase; color: #F4F0E6;
+  }
+  /* On phones the facts stack in a list, so the dots between them are hidden */
+  @media (max-width: 699.98px) { .facts { flex-direction: column; } .facts .oak { display: none; } }
+
+  .intro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,460px),1fr)); gap: 20px 88px; align-items: end; }
+
+  /* Sample board */
+  .board { display: flex; gap: 6px; height: clamp(520px,62vh,680px); }
+  .plank {
+    position: relative; flex: 1 1 0; min-width: 0; min-height: 0; overflow: hidden; display: block;
+    text-decoration: none; color: #F4F0E6; background: #215A5E;
+    transition: flex 0.7s cubic-bezier(.2,.7,.2,1);
+  }
+  .plank:hover { color: #F4F0E6; }
+  .plank.active { flex: 5 1 0; }
+  .plank img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .plank-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,58,61,0.05) 30%, rgba(16,58,61,0.9) 100%); }
+  .plank-text { position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .plank-title {
+    font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: clamp(20px,1.7vw,28px); line-height: 1.1;
+    letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+  }
+  .plank.active .plank-title { writing-mode: horizontal-tb; transform: none; }
+  .plank-desc { font-size: 16px; line-height: 1.45; color: #E1EDEB; max-width: 24em; opacity: 0; transition: opacity 0.5s; }
+  .plank.active .plank-desc { opacity: 1; }
+  @media (max-width: 699.98px) {
+    .board { flex-direction: column; height: auto; }
+    .plank { flex: 0 0 96px; transition: flex-basis 0.7s cubic-bezier(.2,.7,.2,1); }
+    .plank.active { flex: 0 0 360px; }
+    .plank-title { writing-mode: horizontal-tb; transform: none; white-space: normal; }
+    .plank:not(.active) .plank-desc { display: none; }
+  }
+
+  /* Before / after */
+  .compare { position: relative; aspect-ratio: 3/4; overflow: hidden; user-select: none; }
+  .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .compare-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .compare-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 4px; margin-left: -2px; background: #F4F0E6; pointer-events: none; }
+  .compare-handle {
+    position: absolute; top: 50%; left: var(--pos); width: 64px; height: 64px; margin: -32px 0 0 -32px;
+    border-radius: 50%; border: 4px solid #F4F0E6; background: #103A3D; display: flex; align-items: center; justify-content: center;
+    color: #F4F0E6; font-weight: 800; font-size: 18px; pointer-events: none;
+  }
+  .compare-tag { position: absolute; top: 14px; font-weight: 700; font-size: 15px; padding: 7px 12px; line-height: 1.4; pointer-events: none; }
+  .compare-range {
+    position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0;
+    cursor: ew-resize; -webkit-appearance: none; appearance: none; touch-action: pan-y;
+  }
+  .compare-range::-webkit-slider-thumb { -webkit-appearance: none; width: 64px; height: 100vh; }
+  .compare-range::-moz-range-thumb { width: 64px; height: 100vh; border: 0; }
+  .compare:has(.compare-range:focus-visible) .compare-handle { outline: 3px solid #F0C489; outline-offset: 3px; }
+
+  /* Stairs: photos step down like stairs */
+  .stairs { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 10px; align-items: start; }
+  .step { margin: 0; position: relative; aspect-ratio: 3/4; overflow: hidden; }
+  .step img { width: 100%; height: 100%; object-fit: cover; }
+  .step-1 { margin-top: 160px; }
+  .step-2 { margin-top: 80px; }
+  @media (max-width: 1139.98px) { .stairs { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 699.98px) { .stairs { grid-template-columns: 1fr; } .step-1, .step-2 { margin-top: 0; } }
+
+  /* Commercial */
+  .commercial { position: relative; overflow: hidden; background: #0A282A; }
+  .commercial > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .commercial-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,40,42,0.94) 0%, rgba(10,40,42,0.78) 42%, rgba(10,40,42,0.1) 80%); }
+
+  /* Masonry grid */
+  .masonry { columns: 4; column-gap: 6px; }
+  .masonry figure { margin: 0 0 6px; break-inside: avoid; position: relative; overflow: hidden; }
+  .masonry img { width: 100%; height: auto; }
+  @media (max-width: 1139.98px) { .masonry { columns: 3; } }
+  @media (max-width: 699.98px) { .masonry { columns: 2; } }
+
+  /* Final CTA circle */
+  .cta-circle { justify-self: center; width: min(100%,520px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 8px solid #103A3D; }
+  .cta-circle img { width: 100%; height: 100%; object-fit: cover; }
+</style>

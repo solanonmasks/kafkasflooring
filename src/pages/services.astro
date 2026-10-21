@@ -1,0 +1,59 @@
+---
+// Services page ( /services ). The 7 services come from src/data/site.js.
+import Base from '../layouts/Base.astro';
+import { services } from '../data/site.js';
+---
+<Base
+  title="Flooring Services | Kafkas Flooring, Vancouver"
+  description="Hardwood, luxury vinyl plank, laminate, glue-down vinyl, carpet tile, stairs, baseboards and subfloor prep. Residential and commercial flooring installation in Vancouver."
+>
+<main>
+  <section class="wrap head">
+    <h1 class="display" style="font-size:clamp(56px,7.4vw,128px)">What we <span class="oak">install.</span></h1>
+    <p style="margin:0;font-size:20px;color:#D2E4E1">Residential and commercial. Supply your own flooring or ask us what we’d use. Either way, the install and the prep are ours.</p>
+  </section>
+
+  {services.map((s, i) => (
+    <section style="border-top:1px solid #215A5E">
+      <div class="wrap row">
+        <div class="photo" style={`order:${i % 2 ? 2 : 0}`}><img src={s.img} alt={s.title} loading={i < 2 ? 'eager' : 'lazy'} /></div>
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <span class="display oak" style="font-size:20px">{String(i + 1).padStart(2, '0')}</span>
+          <h2 class="display" style="font-size:clamp(36px,3.8vw,62px);line-height:1.02">{s.title}</h2>
+          <p style="margin:0;font-size:19px;color:#D2E4E1">{s.long}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            {s.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section style="background:#E2AE6C;color:#103A3D">
+    <div class="wrap band">
+      <h2 class="display" style="font-size:clamp(36px,4vw,64px);line-height:1.02;max-width:14em">Not sure which floor suits the room? Ask us.</h2>
+      <a href="/contact" class="btn btn-teal">Get a Free Estimate</a>
+    </div>
+  </section>
+</main>
+</Base>
+
+<style>
+  .head {
+    padding-top: clamp(56px,7vw,112px); padding-bottom: clamp(40px,4vw,64px);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,460px),1fr)); gap: 24px 88px; align-items: end;
+  }
+  .row {
+    padding-top: clamp(40px,5vw,72px); padding-bottom: clamp(40px,5vw,72px);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,420px),1fr)); gap: 32px 80px; align-items: center;
+  }
+  .photo { aspect-ratio: 16/11; overflow: hidden; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  /* On narrow screens the photo always sits above the text */
+  @media (max-width: 939.98px) { .photo { order: 0 !important; } }
+  .tag { border: 2px solid #3B7C80; padding: 7px 14px; font-weight: 700; font-size: 15px; }
+  .band {
+    padding-top: clamp(48px,6vw,88px); padding-bottom: clamp(48px,6vw,88px);
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px;
+  }
+</style>

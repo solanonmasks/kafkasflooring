@@ -1,0 +1,147 @@
+---
+// Free estimate page ( /contact )
+// The form posts to Formspree. Set your form ID in src/data/site.js (formEndpoint).
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.js';
+
+const floorTypes = ['Hardwood', 'Laminate', 'Luxury vinyl plank', 'Glue-down vinyl', 'Carpet tile', 'Stairs only', 'Not sure yet'];
+const sizes = ['Under 300 sq ft', '300 to 800 sq ft', '800 to 1,500 sq ft', 'Over 1,500 sq ft', 'Commercial space'];
+---
+<Base
+  title="Free Estimate | Kafkas Flooring, Vancouver"
+  description="Request a free flooring estimate in Vancouver. Tell us the rooms, rough size and the floor you have in mind, and we’ll come measure."
+>
+<main>
+  <section class="wrap contact">
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <h1 class="display" style="font-size:clamp(52px,6.4vw,108px)">Get a free <span class="oak">estimate.</span></h1>
+
+      <form id="estimate-form" action={site.formEndpoint} method="POST" enctype="multipart/form-data" class="form">
+        <input type="hidden" name="_subject" value="New estimate request from the website" />
+        <label>Name *<input required name="name" autocomplete="name" /></label>
+        <label>Phone *<input required type="tel" name="phone" autocomplete="tel" /></label>
+        <label>Email<input type="email" name="email" autocomplete="email" /></label>
+        <label>City
+          <select name="city">
+            {site.serviceAreas.map((c) => <option>{c}</option>)}
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Floor type
+          <select name="floor_type">{floorTypes.map((f) => <option>{f}</option>)}</select>
+        </label>
+        <label>Rough size
+          <select name="size">{sizes.map((s) => <option>{s}</option>)}</select>
+        </label>
+        <label class="full">Tell us about the job
+          <textarea name="message" rows="5" placeholder="Rooms, stairs, what's there now, and when you'd like it done."></textarea>
+        </label>
+        <label class="full">Photos of the space (optional)
+          <input type="file" name="photos" multiple accept="image/*" class="file" />
+        </label>
+        <div class="full">
+          <button type="submit" class="btn btn-oak submit">Send my estimate request</button>
+          <p id="form-error" class="form-error" role="alert" hidden>
+            Sorry, something went wrong sending your request. Please try again, or <a href={site.facebook} target="_blank" rel="noopener">message us on Facebook</a>.
+          </p>
+        </div>
+      </form>
+
+      <div id="form-thanks" class="thanks" role="status" hidden>
+        <h2 class="display" style="font-size:40px">Got it. Thanks.</h2>
+        <p style="margin:0;color:#D2E4E1">We’ll be in touch within a business day to set up a time to measure.</p>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div class="panel-photo"><img src="/images/loft-hardwood.jpg" alt="Wide-plank hardwood in an open loft" /></div>
+      {site.phone && (
+        <div class="panel-item"><span class="panel-label">CALL US</span><a href={site.phoneHref} class="panel-big">{site.phone}</a></div>
+      )}
+      <div class="panel-item" style={site.phone ? 'border-top:2px solid #103A3D;padding-top:20px' : ''}>
+        <span class="panel-label">FASTEST REPLY</span>
+        <a href={site.facebook} target="_blank" rel="noopener" class="panel-big">Message us on Facebook →</a>
+      </div>
+      {site.email && (
+        <div class="panel-item panel-rule"><span class="panel-label">EMAIL</span><a href={`mailto:${site.email}`} style="color:#103A3D;font-weight:600">{site.email}</a></div>
+      )}
+      <div class="panel-item panel-rule"><span class="panel-label">SERVING</span><span style="font-weight:500">{site.serviceAreaText}</span></div>
+      <div class="panel-item panel-rule"><span class="panel-label">EVERY JOB</span><span style="font-weight:500">Free estimate · Fully insured · Residential and commercial</span></div>
+    </aside>
+  </section>
+</main>
+</Base>
+
+<script is:inline>
+  // Sends the form to Formspree without leaving the page, then shows the thank-you box.
+  (function () {
+    var form = document.getElementById('estimate-form');
+    var thanks = document.getElementById('form-thanks');
+    var error = document.getElementById('form-error');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      error.hidden = true;
+      var button = form.querySelector('button[type="submit"]');
+      var label = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Sending…';
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Request failed');
+          form.reset();
+          form.hidden = true;
+          thanks.hidden = false;
+          thanks.scrollIntoView({ block: 'center' });
+        })
+        .catch(function () {
+          error.hidden = false;
+        })
+        .finally(function () {
+          button.disabled = false;
+          button.textContent = label;
+        });
+    });
+  })();
+</script>
+
+<style>
+  .contact {
+    padding-top: clamp(56px,7vw,112px); padding-bottom: clamp(56px,7vw,112px);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,460px),1fr)); gap: 48px 72px; align-items: start;
+  }
+  .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,240px),1fr)); gap: 18px; }
+  .form[hidden] { display: none; }
+  .form label { display: flex; flex-direction: column; gap: 8px; font-weight: 700; font-size: 16px; }
+  .form input, .form select, .form textarea {
+    background: #174A4D; border: 2px solid #3B7C80; color: #F4F0E6; padding: 15px; font-size: 17px; width: 100%; min-width: 0; border-radius: 0;
+  }
+  .form textarea { resize: vertical; }
+  .form textarea::placeholder { color: #93B6B3; }
+  .form .file { border-style: dashed; color: #D2E4E1; padding: 18px; font-size: 16px; }
+  .full { grid-column: 1 / -1; }
+  .submit { padding: 20px 34px; }
+  .submit:disabled { opacity: 0.7; cursor: wait; }
+  .form-error { margin: 14px 0 0; color: #F0C489; font-weight: 700; }
+
+  .thanks { background: #174A4D; border-top: 4px solid #E2AE6C; padding: 32px; display: flex; flex-direction: column; gap: 10px; }
+  .thanks[hidden] { display: none; }
+
+  .panel { background: #E2AE6C; color: #103A3D; padding: clamp(28px,3vw,44px); display: flex; flex-direction: column; gap: 26px; }
+  .panel-photo { aspect-ratio: 16/10; overflow: hidden; }
+  .panel-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .panel-item { display: flex; flex-direction: column; gap: 6px; font-size: 18px; }
+  .panel-rule { border-top: 2px solid #103A3D; padding-top: 20px; }
+  .panel-label { font-weight: 800; font-size: 13px; letter-spacing: 0.22em; }
+  .panel-big {
+    font-family: 'Josefin Sans', sans-serif; font-weight: 300; text-transform: uppercase;
+    font-size: clamp(28px,2.6vw,38px); line-height: 1.05; color: #103A3D; text-decoration: none;
+  }
+  .panel-big:hover { color: #103A3D; text-decoration: underline; }
+</style>

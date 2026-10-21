@@ -1,0 +1,58 @@
+---
+// Gallery page ( /gallery ). Photos and categories come from src/data/site.js.
+import Base from '../layouts/Base.astro';
+import { gallery, galleryFilters } from '../data/site.js';
+---
+<Base
+  title="Our Floors | Kafkas Flooring project gallery, Vancouver"
+  description="Recent hardwood, vinyl plank, laminate, stair and commercial flooring installs by Kafkas Flooring in Vancouver and surrounding areas."
+>
+<main>
+  <section class="wrap" style="padding-top:clamp(56px,7vw,112px);padding-bottom:32px">
+    <h1 class="display" style="font-size:clamp(56px,7.4vw,128px);margin-bottom:28px">Our <span class="oak">floors.</span></h1>
+    <div class="filters" id="filters" role="group" aria-label="Filter photos">
+      {galleryFilters.map((f, i) => (
+        <button type="button" class="filter" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>{f}</button>
+      ))}
+    </div>
+  </section>
+  <section class="wrap" style="padding-bottom:clamp(72px,9vw,128px)">
+    <div class="masonry" id="gallery">
+      {gallery.map((g, i) => (
+        <figure data-cat={g.cat}><img src={g.img} alt={g.label} loading={i < 4 ? 'eager' : 'lazy'} /><figcaption class="caption" style="font-size:14px;padding:6px 12px">{g.label}</figcaption></figure>
+      ))}
+    </div>
+  </section>
+</main>
+</Base>
+
+<script is:inline>
+  // Filter buttons: show only the photos in the chosen category.
+  (function () {
+    var buttons = document.querySelectorAll('#filters .filter');
+    var figures = document.querySelectorAll('#gallery figure');
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = b.getAttribute('data-filter');
+        buttons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        figures.forEach(function (fig) {
+          fig.hidden = !(f === 'All' || fig.getAttribute('data-cat') === f);
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filter { background: transparent; color: #F4F0E6; border: 2px solid #E2AE6C; font-weight: 800; font-size: 16px; padding: 11px 20px; cursor: pointer; }
+  .filter[aria-pressed='true'] { background: #E2AE6C; color: #103A3D; }
+  .filter:hover { background: #F0C489; border-color: #F0C489; color: #103A3D; }
+
+  .masonry { columns: 4; column-gap: 6px; }
+  .masonry figure { margin: 0 0 6px; break-inside: avoid; position: relative; overflow: hidden; }
+  .masonry figure[hidden] { display: none; }
+  .masonry img { width: 100%; height: auto; }
+  @media (max-width: 1139.98px) { .masonry { columns: 3; } }
+  @media (max-width: 699.98px) { .masonry { columns: 2; } }
+</style>

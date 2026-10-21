@@ -1,0 +1,236 @@
+---
+// Shared page shell: <head> tags, header, mobile menu, footer and the sticky
+// mobile Message Us / Free Estimate bar. Every page uses this layout.
+import { site, nav } from '../data/site.js';
+
+const { title, description } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(site.heroImage, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  description:
+    'Flooring installation in Vancouver: hardwood, laminate, luxury vinyl plank, glue-down vinyl, carpet tile, stairs, baseboards and subfloor prep. Fully insured, free estimates.',
+  url: Astro.site?.toString(),
+  image: ogImage.toString(),
+  logo: new URL(site.logo, Astro.site).toString(),
+  foundingDate: String(site.foundedYear),
+  ...(site.phone ? { telephone: site.phone } : {}),
+  ...(site.email ? { email: site.email } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.city,
+    addressRegion: site.region,
+    addressCountry: site.country,
+  },
+  areaServed: site.serviceAreas.map((name) => ({ '@type': 'City', name })),
+  sameAs: [site.facebook],
+};
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/png" href={site.logo} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script src="/motion.js" is:inline defer></script>
+</head>
+<body>
+<div class="page">
+
+<header class="site-header" id="site-header">
+  <div class="header-bar">
+    <a href="/" class="logo" aria-label="Kafkas Flooring home">
+      <span class="logo-mark"><img src={site.logo} alt="" width="56" height="56" /></span>
+      <span class="logo-text"><span class="logo-name">KAFKAS</span><span class="logo-sub">FLOORING</span></span>
+    </a>
+    <nav class="desktop-only desktop-nav" aria-label="Main">
+      {nav.map((n) => (
+        <a href={n.href} class:list={[{ active: path === n.href }]} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
+    {site.phone && <a href={site.phoneHref} class="desktop-only header-phone">{site.phone}</a>}
+    <a href="/contact" class="desktop-only btn btn-oak header-cta">Get a Free Estimate</a>
+    <button type="button" class="mobile-only menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile">
+    {nav.map((n) => <a href={n.href} class="mobile-menu-link">{n.label}</a>)}
+    {site.phone && <a href={site.phoneHref} class="mobile-menu-link">Call {site.phone}</a>}
+  </nav>
+</header>
+
+<slot />
+
+<footer class="site-footer">
+  <div class="plank-strip" aria-hidden="true">
+    <span style="flex:5;background:#C48A4A"></span><span style="flex:3;background:#F4F0E6"></span><span style="flex:7;background:#2F7377"></span><span style="flex:4;background:#D69C5A"></span><span style="flex:6;background:#E2AE6C"></span><span style="flex:2;background:#B57A40"></span><span style="flex:5;background:#D69C5A"></span>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <span class="footer-brand">
+        <span class="logo-mark logo-mark-lg"><img src={site.logo} alt="" width="72" height="72" /></span>
+        <span class="logo-text"><span class="logo-name" style="font-size:24px">KAFKAS</span><span class="logo-sub" style="font-size:15px">FLOORING</span></span>
+      </span>
+      <span>Professional flooring installation in Vancouver and surrounding areas. {site.yearsExperience} years experience.</span>
+    </div>
+    <div class="footer-col">
+      <span class="footer-label">INSTALL</span>
+      <span>Hardwood · Laminate · Vinyl plank</span>
+      <span>Glue-down vinyl · Carpet tile</span>
+      <span>Stairs · Baseboards and trim</span>
+      <span>Subfloor prep and self-leveling</span>
+    </div>
+    <div class="footer-col">
+      <span class="footer-label">CONTACT</span>
+      {site.phone && <a href={site.phoneHref}>{site.phone}</a>}
+      {site.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
+      <a href={site.facebook} target="_blank" rel="noopener">Facebook</a>
+      <a href="/contact">Free estimate form</a>
+      <span>Fully insured</span>
+    </div>
+  </div>
+  <div class="footer-copy">© {new Date().getFullYear()} {site.name}</div>
+  <div class="mobile-only" style="height:66px"></div>
+</footer>
+
+<div class="mobile-only bottom-bar">
+  {site.phone
+    ? <a href={site.phoneHref} class="bottom-msg">Call</a>
+    : <a href={site.facebook} target="_blank" rel="noopener" class="bottom-msg">Message Us</a>}
+  <a href="/contact" class="bottom-cta">Free Estimate</a>
+</div>
+
+</div>
+
+<script is:inline>
+  // Mobile menu: open/close the overlay under the header.
+  (function () {
+    var btn = document.getElementById('menu-btn');
+    var header = document.getElementById('site-header');
+    if (!btn || !header) return;
+    btn.addEventListener('click', function () {
+      var open = header.classList.toggle('menu-open');
+      btn.textContent = open ? 'Close' : 'Menu';
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>
+
+<style is:global>
+  /* ---- Colours (from the design handoff) ----
+     teal base #103A3D · raised #174A4D · lines #215A5E / #2C6A6E / #3B7C80
+     brand teal #2F7377 · process #27666A · footer #0A282A
+     cream #F4F0E6 · dark text on cream #103A3D / #27484A
+     light text on teal #D2E4E1 / #E1EDEB · oak #E2AE6C, hover #F0C489 */
+  html, body { margin: 0; padding: 0; background: #103A3D; color: #F4F0E6; }
+  * { box-sizing: border-box; }
+  a { color: #E2AE6C; text-underline-offset: 4px; }
+  a:hover { color: #F0C489; }
+  img { display: block; }
+  input, select, textarea, button { font: inherit; }
+
+  .page {
+    font-family: 'Albert Sans', system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: clip;
+  }
+
+  /* Shared building blocks */
+  .wrap { max-width: 1440px; margin: 0 auto; padding-left: clamp(20px,4vw,56px); padding-right: clamp(20px,4vw,56px); }
+  .display {
+    font-family: 'Josefin Sans', sans-serif; font-weight: 300; text-transform: uppercase;
+    line-height: 1; letter-spacing: 0.01em; margin: 0;
+  }
+  .oak { color: #E2AE6C; }
+  .cream { background: #F4F0E6; color: #103A3D; }
+
+  .btn { display: inline-block; font-weight: 800; font-size: 18px; padding: 19px 30px; text-decoration: none; white-space: nowrap; border: none; cursor: pointer; }
+  .btn-oak { background: #E2AE6C; color: #103A3D; }
+  .btn-oak:hover { background: #F0C489; color: #103A3D; }
+  .btn-cream { background: #F4F0E6; color: #103A3D; }
+  .btn-cream:hover { background: #FFFFFF; color: #103A3D; }
+  .btn-teal { background: #103A3D; color: #F4F0E6; padding: 20px 32px; }
+  .btn-teal:hover { background: #215A5E; color: #F4F0E6; }
+  .btn-outline-teal { border: 2px solid #103A3D; color: #103A3D; background: transparent; padding: 18px 30px; }
+  .btn-outline-teal:hover { background: #103A3D; color: #F4F0E6; }
+
+  .caption {
+    position: absolute; left: 0; bottom: 0; background: #103A3D; color: #F4F0E6;
+    font-weight: 700; font-size: 15px; padding: 8px 14px; line-height: 1.4;
+  }
+
+  :focus-visible { outline: 3px solid #F0C489; outline-offset: 3px; }
+
+  /* Show/hide by screen size: the nav collapses below 1140px */
+  @media (max-width: 1139.98px) { .desktop-only { display: none !important; } }
+  @media (min-width: 1140px) { .mobile-only { display: none !important; } .mobile-menu { display: none !important; } }
+
+  /* Header */
+  .site-header {
+    position: sticky; top: 0; z-index: 40; background: rgba(16,58,61,0.96);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid #215A5E;
+  }
+  .header-bar { max-width: 1440px; margin: 0 auto; padding: 16px clamp(20px,4vw,56px); display: flex; align-items: center; gap: 24px 36px; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F4F0E6; margin-right: auto; }
+  .logo:hover { color: #F4F0E6; }
+  .logo-mark { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; flex: none; background: #2F7377; }
+  .logo-mark-lg { width: 72px; height: 72px; }
+  .logo-mark img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.36); }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.05; font-family: 'Josefin Sans', sans-serif; font-weight: 400; letter-spacing: 0.12em; color: #F4F0E6; }
+  .logo-name { font-size: 22px; }
+  .logo-sub { font-size: 14px; color: #E2AE6C; letter-spacing: 0.2em; }
+  .desktop-nav { display: flex; gap: 36px; }
+  .desktop-nav a { color: #F4F0E6; text-decoration: none; font-weight: 600; font-size: 17px; }
+  .desktop-nav a.active, .desktop-nav a:hover { color: #E2AE6C; }
+  .header-phone { color: #F4F0E6; font-weight: 800; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .header-cta { font-size: 16px; padding: 15px 24px; }
+  .menu-btn { background: #E2AE6C; border: none; color: #103A3D; font-weight: 800; font-size: 16px; padding: 12px 18px; cursor: pointer; }
+
+  .mobile-menu { display: none; flex-direction: column; background: #103A3D; border-top: 1px solid #215A5E; padding: 8px clamp(20px,4vw,56px) 24px; }
+  .site-header.menu-open .mobile-menu { display: flex; }
+  .mobile-menu-link { color: #F4F0E6; text-decoration: none; font-family: 'Josefin Sans', sans-serif; font-weight: 400; font-size: 30px; padding: 12px 0; border-bottom: 1px solid #215A5E; }
+
+  /* Footer */
+  .site-footer { background: #0A282A; color: #D2E4E1; }
+  .plank-strip { display: flex; gap: 3px; height: 10px; }
+  .footer-grid {
+    max-width: 1440px; margin: 0 auto; padding: clamp(48px,6vw,80px) clamp(20px,4vw,56px) 32px;
+    display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,220px),1fr)); gap: 32px 56px;
+  }
+  .footer-col { display: flex; flex-direction: column; gap: 8px; }
+  .footer-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .footer-label { font-weight: 800; font-size: 13px; letter-spacing: 0.22em; color: #E2AE6C; }
+  .footer-copy { max-width: 1440px; margin: 0 auto; padding: 16px clamp(20px,4vw,56px) 28px; font-size: 14px; color: #93B6B3; }
+
+  /* Sticky mobile bar */
+  .bottom-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: 1fr 1fr; }
+  .bottom-bar a { font-weight: 800; font-size: 17px; text-align: center; padding: 20px 8px; text-decoration: none; }
+  .bottom-msg { background: #103A3D; color: #F4F0E6; border-top: 2px solid #E2AE6C; }
+  .bottom-cta { background: #E2AE6C; color: #103A3D; }
+</style>
+</body>
+</html>
