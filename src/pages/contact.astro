@@ -65,6 +65,7 @@ const sizes = ['Under 300 sq ft', '300 to 800 sq ft', '800 to 1,500 sq ft', 'Ove
       {site.email && (
         <div class="panel-item panel-rule"><span class="panel-label">EMAIL</span><a href={`mailto:${site.email}`} style="color:#103A3D;font-weight:600">{site.email}</a></div>
       )}
+      <div class="panel-item panel-rule"><span class="panel-label">ADDRESS</span><span style="font-weight:500">{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postalCode}</span></div>
       <div class="panel-item panel-rule"><span class="panel-label">SERVING</span><span style="font-weight:500">{site.serviceAreaText}</span></div>
       <div class="panel-item panel-rule"><span class="panel-label">EVERY JOB</span><span style="font-weight:500">Free estimate · Fully insured · Residential and commercial</span></div>
     </aside>

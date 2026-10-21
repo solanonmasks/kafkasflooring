@@ -3,8 +3,8 @@
 //
 // - Facebook link, service areas and the form endpoint are used in the header,
 //   footer, contact page, mobile bottom bar and Google's structured data.
-// - When you get a phone number, fill in `phone` / `phoneHref` below and it
-//   will appear in the header, mobile menu, contact page and footer.
+// - The phone number appears in the header, mobile menu, mobile bottom bar,
+//   contact page and footer. The address appears in the footer and contact page.
 // - Photos live in /public/images. The lists below say which photo goes where.
 // ---------------------------------------------------------------------------
 
@@ -15,19 +15,22 @@ export const site = {
   yearsExperience: 16,
   foundedYear: 2010, // inferred from "16 years" — confirm with the client
 
-  // Leave these empty until the client gives you a number. Example:
-  //   phone: '604.555.0123', phoneHref: 'tel:+16045550123'
-  phone: '',
-  phoneHref: '',
+  // How the number is shown on the page, and the digits used for tap-to-call links.
+  phone: '(604) 780-1071',
+  phoneHref: 'tel:+16047801071',
 
   // Optional — shown on the contact page and in the footer when filled in.
   email: '',
 
   facebook: 'https://www.facebook.com/profile.php?id=100064131426409',
 
-  city: 'Vancouver',
-  region: 'BC',
-  country: 'CA',
+  address: {
+    street: '5933 Cooney Rd.',
+    city: 'Richmond',
+    region: 'BC',
+    postalCode: 'V6X 1A7',
+    country: 'CA',
+  },
 
   // Cities in the contact form's "City" list and in Google's structured data.
   serviceAreas: [

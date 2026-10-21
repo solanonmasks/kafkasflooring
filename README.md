@@ -42,9 +42,8 @@ Every push to `main` will redeploy the site automatically.
 
 ## Where to change things
 
-- **Phone, email, Facebook link, service areas, form endpoint:** `src/data/site.js`.
-  Change it once there and every page updates. The phone number is empty for now; when you fill it in,
-  it appears automatically in the header, mobile menu, mobile bottom bar, contact page and footer.
+- **Phone, address, email, Facebook link, service areas, form endpoint:** `src/data/site.js`.
+  Change it once there and every page updates.
 - **The 7 services and the gallery photos/captions:** also in `src/data/site.js`.
 - **Page text:** in the page files listed above (the text is written right in the HTML).
 - **Photos:** `public/images/`. To swap a photo, replace the file and keep the same name.
@@ -57,7 +56,7 @@ Every push to `main` will redeploy the site automatically.
       into `formEndpoint` in `src/data/site.js` (it's `https://formspree.io/f/YOUR_FORM_ID` right now, so the
       form will show an error until this is set). Note: Formspree only accepts **photo uploads on a paid plan**;
       on the free plan, either upgrade or remove the "Photos of the space" field in `src/pages/contact.astro`.
-- [ ] **Get from the client:** phone number, email and business address (add them in `src/data/site.js`).
+- [ ] **Get from the client:** an email address, if they want one shown (add it in `src/data/site.js`).
 - [ ] **Check facts with the client:** the service-area city list and the start year (`foundedYear: 2010`
       is guessed from "16 years").
 - [ ] Optional: real Google or Facebook reviews for a testimonials section.

@@ -23,9 +23,11 @@ const jsonLd = {
   ...(site.email ? { email: site.email } : {}),
   address: {
     '@type': 'PostalAddress',
-    addressLocality: site.city,
-    addressRegion: site.region,
-    addressCountry: site.country,
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
   },
   areaServed: site.serviceAreas.map((name) => ({ '@type': 'City', name })),
   sameAs: [site.facebook],
@@ -105,6 +107,7 @@ const jsonLd = {
       <span class="footer-label">CONTACT</span>
       {site.phone && <a href={site.phoneHref}>{site.phone}</a>}
       {site.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
+      <span>{site.address.street}<br />{site.address.city}, {site.address.region} {site.address.postalCode}</span>
       <a href={site.facebook} target="_blank" rel="noopener">Facebook</a>
       <a href="/contact">Free estimate form</a>
       <span>Fully insured</span>
